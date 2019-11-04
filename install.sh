@@ -162,79 +162,67 @@ require_nvm stable
 npm config set save-exact true
 
 # install packages
-ask "install packages?"
-if [[ $REPLY =~ (yes|y|Y) ]]; then
-    bot "tapping other repositories"
-    running "tapping mongodb"
-    brew tap mongodb/brew
-    ok
+bot "tapping other repositories"
+running "tapping mongodb"
+brew tap mongodb/brew
+ok
 
-    bot "installing brew packages"
-    require_brew zsh
-    require_brew yarn
-    require_brew python
+bot "installing brew packages"
+require_brew zsh
+require_brew yarn
+require_brew python
 
-    ## Specific to Fox
-    require_brew mongodb-community
-    require_brew aws-iam-authenticator
+## Specific to Fox
+require_brew mongodb-community
+require_brew aws-iam-authenticator
 
-    ## Installing awscli
-    if [ ! -f /usr/local/bin/aws ]; then
-        bot "installing awscli (requires sudo)"
-        curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-        unzip awscli-bundle.zip
-        sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-    fi
-
-    bot "installing cask packages"
-    require_cask docker
-    require_cask flux
-    require_cask gitkraken
-    require_cask google-chrome
-    require_cask iterm2
-    require_cask keybase
-    require_cask mongodb-compass
-    require_cask notion
-    require_cask postman
-    require_cask robo-3t
-    require_cask sequel-pro
-    require_cask slack
-    require_cask smcfancontrol
-    require_cask spectacle
-    require_cask spotify
-    require_cask sublime-text
-    require_cask the-unarchiver
-    require_cask tunnelblick
-    require_cask visual-studio-code
-
-    # install visual code extensions
-    bot "installing visual code extensions..."
-    function vcie() {
-        running "code --install-extensions $1"
-        code --install-extension $1
-        ok
-    }
-    vcie dbaeumer.vscode-eslint
-    vcie eamodio.gitlens
-    vcie editorconfig.editorconfig
-    vcie esbenp.prettier-vscode
-    vcie ms-azuretools.vscode-docker
-    vcie ms-python.python
-    vcie visualstudioexptteam.vscodeintellicode
-    vcie vscode-icons-team.vscode-icons
-    vcie vscodevim.vim
-    vcie zhuangtongfa.material-theme
+## Installing awscli
+if [ ! -f /usr/local/bin/aws ]; then
+    bot "installing awscli (requires sudo)"
+    curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+    unzip awscli-bundle.zip
+    sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 fi
 
-[ ! -d "$DOTFILES" ] && git clone --recurse-submodules https://github.com/$REPO_LOCATION
+bot "installing cask packages"
+require_cask docker
+require_cask flux
+require_cask gitkraken
+require_cask google-chrome
+require_cask iterm2
+require_cask keybase
+require_cask mongodb-compass
+require_cask notion
+require_cask postman
+require_cask robo-3t
+require_cask sequel-pro
+require_cask slack
+require_cask smcfancontrol
+require_cask spectacle
+require_cask sublime-text
+require_cask the-unarchiver
+require_cask tunnelblick
+require_cask visual-studio-code
 
-## Keep it for future reintegration
-# function make_key() {
-#     [ ! -f "$HOME/.ssh/$2" ] && ssh-keygen -q -t rsa -b 4096 -C "$1" -f "$HOME/.ssh/$2" -N ""
-# }
-# bot "Setting up your ssh key"
-# make_key "$WORK_EMAIL" "id_rsa"
-# ok
+# install visual code extensions
+bot "installing visual code extensions..."
+function vcie() {
+    running "code --install-extensions $1"
+    code --install-extension $1
+    ok
+}
+vcie dbaeumer.vscode-eslint
+vcie eamodio.gitlens
+vcie editorconfig.editorconfig
+vcie esbenp.prettier-vscode
+vcie ms-azuretools.vscode-docker
+vcie ms-python.python
+vcie visualstudioexptteam.vscodeintellicode
+vcie vscode-icons-team.vscode-icons
+vcie vscodevim.vim
+vcie zhuangtongfa.material-theme
+
+[ ! -d "$DOTFILES" ] && git clone --recurse-submodules https://github.com/$REPO_LOCATION
 
 bot "setting up dotfiles..."
 DOTFILES_PLUGS="$DOTFILES/oh-my-zsh-plugins"
@@ -262,66 +250,63 @@ ok "dotfiles setup correctly"
 
 ### System changes
 
-ask "setup system?"
-if [[ $REPLY =~ (yes|y|Y) ]]; then
-    # Restart automatically if the computer freezes
-    sudo systemsetup -setrestartfreeze on
-    # Never go into computer sleep mode
-    sudo systemsetup -setcomputersleep Off >/dev/null
-    # Disable press-and-hold for keys in favor of key repeat
-    defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-    # Enable subpixel font rendering on non-Apple LCDs
-    defaults write NSGlobalDomain AppleFontSmoothing -int 2
+# Restart automatically if the computer freezes
+sudo systemsetup -setrestartfreeze on
+# Never go into computer sleep mode
+sudo systemsetup -setcomputersleep Off >/dev/null
+# Disable press-and-hold for keys in favor of key repeat
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# Enable subpixel font rendering on non-Apple LCDs
+defaults write NSGlobalDomain AppleFontSmoothing -int 2
 
-    ### FINDER
-    # Allow quitting via ⌘ + Q; doing so will also hide desktop icons
-    defaults write com.apple.finder QuitMenuItem -bool true
-    # Disable window animations and Get Info animations
-    defaults write com.apple.finder DisableAllAnimations -bool true
-    # Show hidden files by default
-    defaults write com.apple.finder AppleShowAllFiles -bool true
-    # Show all filename extensions
-    defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-    # Show status bar
-    defaults write com.apple.finder ShowStatusBar -bool true
-    # Show path bar
-    defaults write com.apple.finder ShowPathbar -bool true
-    # Allow text selection in Quick Look
-    defaults write com.apple.finder QLEnableTextSelection -bool true
-    # Display full POSIX path as Finder window title
-    defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
-    # Disable the warning when changing a file extension
-    defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-    # Enable spring loading for directories
-    defaults write NSGlobalDomain com.apple.springing.enabled -bool true
-    # running "Remove the spring loading delay for directories
-    defaults write NSGlobalDomain com.apple.springing.delay -float 0
-    # Avoid creating .DS_Store files on network volumes
-    defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-    # Disable the warning before emptying the Trash
-    defaults write com.apple.finder WarnOnEmptyTrash -bool false
-    # Empty Trash securely by default
-    defaults write com.apple.finder EmptyTrashSecurely -bool true
+### FINDER
+# Allow quitting via ⌘ + Q; doing so will also hide desktop icons
+defaults write com.apple.finder QuitMenuItem -bool true
+# Disable window animations and Get Info animations
+defaults write com.apple.finder DisableAllAnimations -bool true
+# Show hidden files by default
+defaults write com.apple.finder AppleShowAllFiles -bool true
+# Show all filename extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+# Show status bar
+defaults write com.apple.finder ShowStatusBar -bool true
+# Show path bar
+defaults write com.apple.finder ShowPathbar -bool true
+# Allow text selection in Quick Look
+defaults write com.apple.finder QLEnableTextSelection -bool true
+# Display full POSIX path as Finder window title
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+# Disable the warning when changing a file extension
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+# Enable spring loading for directories
+defaults write NSGlobalDomain com.apple.springing.enabled -bool true
+# running "Remove the spring loading delay for directories
+defaults write NSGlobalDomain com.apple.springing.delay -float 0
+# Avoid creating .DS_Store files on network volumes
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+# Disable the warning before emptying the Trash
+defaults write com.apple.finder WarnOnEmptyTrash -bool false
+# Empty Trash securely by default
+defaults write com.apple.finder EmptyTrashSecurely -bool true
 
-    ### DOCK
-    # Set the icon size of Dock items to 36 pixels
-    defaults write com.apple.dock tilesize -int 36
-    # Change minimize/maximize window effect to scale
-    defaults write com.apple.dock mineffect -string "scale"
-    # Minimize windows into their application’s icon"
-    defaults write com.apple.dock minimize-to-application -bool true
-    # Enable spring loading for all Dock items
-    defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
-    # Show indicator lights for open applications in the Dock
-    defaults write com.apple.dock show-process-indicators -bool true
-    # Don’t animate opening applications from the Dock"
-    defaults write com.apple.dock launchanim -bool false
-    # Speed up Mission Control animations
-    defaults write com.apple.dock expose-animation-duration -float 0.1
-    # Remove the auto-hiding Dock delay
-    defaults write com.apple.dock autohide-delay -float 0
-    # Automatically hide and show the Dock
-    defaults write com.apple.dock autohide -bool true
-    # Make Dock icons of hidden applications translucent"
-    defaults write com.apple.dock showhidden -bool true
-fi
+### DOCK
+# Set the icon size of Dock items to 36 pixels
+defaults write com.apple.dock tilesize -int 36
+# Change minimize/maximize window effect to scale
+defaults write com.apple.dock mineffect -string "scale"
+# Minimize windows into their application’s icon"
+defaults write com.apple.dock minimize-to-application -bool true
+# Enable spring loading for all Dock items
+defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
+# Show indicator lights for open applications in the Dock
+defaults write com.apple.dock show-process-indicators -bool true
+# Don’t animate opening applications from the Dock"
+defaults write com.apple.dock launchanim -bool false
+# Speed up Mission Control animations
+defaults write com.apple.dock expose-animation-duration -float 0.1
+# Remove the auto-hiding Dock delay
+defaults write com.apple.dock autohide-delay -float 0
+# Automatically hide and show the Dock
+defaults write com.apple.dock autohide -bool true
+# Make Dock icons of hidden applications translucent"
+defaults write com.apple.dock showhidden -bool true
