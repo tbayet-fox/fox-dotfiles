@@ -1,0 +1,36 @@
+{
+    "workbench.iconTheme": "vscode-icons",
+    "editor.lineNumbers": "relative",
+    "vim.easymotion": true,
+    "vim.useSystemClipboard": true,
+    "vim.highlightedyank.enable": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "j",
+                "k"
+            ],
+            "after": [
+                "<Esc>"
+            ]
+        }
+    ],
+    "editor.fontFamily": "'Fira Code', monospace",
+    "editor.fontSize": 14,
+    "editor.fontWeight": "400",
+    "editor.fontLigatures": true,
+    "explorer.confirmDragAndDrop": false,
+    "editor.suggestSelection": "first",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.tabWidth": 4,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "explorer.confirmDelete": false,
+    "python.jediEnabled": false,
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "git.enableSmartCommit": true
+}
