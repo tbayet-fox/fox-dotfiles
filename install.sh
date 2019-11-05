@@ -222,7 +222,7 @@ vcie vscode-icons-team.vscode-icons
 vcie vscodevim.vim
 vcie zhuangtongfa.material-theme
 
-[ ! -d "$DOTFILES" ] && git clone --recurse-submodules https://github.com/$REPO_LOCATION
+[ ! -d "$DOTFILES" ] && git clone --recurse-submodules https://github.com/$REPO_LOCATION $DOTFILES
 
 bot "setting up dotfiles..."
 DOTFILES_PLUGS="$DOTFILES/oh-my-zsh-plugins"
@@ -241,6 +241,7 @@ link_dir "$DOTFILES/oh-my-zsh" "$HOME/.oh-my-zsh"
 # Links all the files for zsh and oh-my-zsh
 link_dir "$DOTFILES/zsh-themes" "$HOME/.zsh-themes"
 
+[ ! -d "$HOME_PLUGS" ] && mkdir -p $HOME_PLUGS
 link_dir "$DOTFILES_PLUGS/$FSH_PLUG" "$HOME_PLUGS/$FSH_PLUG"
 link_dir "$DOTFILES_PLUGS/$AUTO_SUG" "$HOME_PLUGS/$AUTO_SUG"
 ln -sf "$DOTFILES_PLUGS/z/z.sh" "$HOME_PLUGS/z.sh"
